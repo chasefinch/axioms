@@ -389,7 +389,7 @@ Some abbreviations of long words are common enough in the coding world to be eas
 
 These abbreviations are OK and preferred:
 
-`ad`, `abbr`, `ai`, `api`, `attr`, `bool`, `cli`, `config`, `db`, `desc`, `dict`, `enum`, `env`, `expr`, `gui`, `hex` (`oct`, etc.), `info`, `int`, `kg` (`lbs`, `ft`, `mi`, etc.), `len`, `max`, `min`, `num`, `os`, `param`, `pk`, `src`, `str`, `utils`
+`ad`, `abbr`, `ai`, `api`, `attr`, `a11y` (`l10n`, `i18n`), `bool`, `cli`, `config`, `db`, `desc`, `dict`, `enum`, `env`, `expr`, `gui`, `hex` (`oct`, etc.), `info`, `int`, `kg` (`lbs`, `ft`, `mi`, etc.), `len`, `max`, `min`, `num`, `os`, `param`, `pk`, `src`, `str`, `utils`
 
 So are abbreviations that are more descriptive on their own, especially for HTML attributes:
 
