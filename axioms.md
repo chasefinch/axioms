@@ -397,7 +397,7 @@ So are abbreviations that are more descriptive on their own, especially for HTML
 
 Abbreviations using common acronyms for formal or technical names are also OK:
 
-`amex`, `dns`, `gpu`, `ip`, `js`, `llm`, (`css`, `html`, `json`, `xml`, etc.), `ram`, `sql`, `url`,  `usb`, `USD` (`CAD`, etc.), `vpn`
+`amex`, `bin`, `dns`, `gpu`, `ip`, `js`, `lib`, `llm`, (`css`, `html`, `json`, `xml`, etc.), `ram`, `sql`, `src`, `url`,  `usb`, `USD` (`CAD`, etc.), `vpn`
 
 Avoid abbreviations that are uncommon, ambiguous, or save almost no effort over the full word:
 

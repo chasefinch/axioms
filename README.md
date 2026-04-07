@@ -1,4 +1,4 @@
-# Software Development Axioms
+# 🌱 Software Development Axioms
 
 High-level software development guidelines that cannot be enforced by linters. Particularly helpful for AI agents during automated code reviews. Use them during design, development, and code review as a shared mental model for how to build software.
 
