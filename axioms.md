@@ -33,11 +33,12 @@ These axioms are high-level guidelines that cannot be enforced by linters. Use t
 - **X109** – Use monitoring and observability platforms.
 - [**X110**](#x110) – Use centralized logging, but avoid noisy or low-value logs.
 - **X111** – Prefer platforms-as-a-service to self-managed infrastructure where possible.
-- **X112** – Use as little infrastructure as possible. Remove or simplify infra when making changes.
-- **X113** – Prefer configuration-file-based infrastructure over click-configured environments.
-- **X114** – Automate deployment routines and make them repeatable.
-- **X115** – Update dependencies, fix warnings, and add automations as the opportunity arises.
+- **X112** – Lean into the full feature set of adopted platforms rather than reimplementing or stitching together separate tools.
+- **X113** – Use as little infrastructure as possible. Remove or simplify infra when making changes.
+- **X114** – Prefer configuration-file-based infrastructure over click-configured environments.
+- **X115** – Automate deployment routines and make them repeatable.
 - **X116** – Keep staging environments as close to production as possible.
+- **X117** – Update dependencies, fix warnings, and add automations as the opportunity arises.
 
 # 2 - Code
 
@@ -287,7 +288,7 @@ Well-designed MCP integrations make the agent's environment self-documenting —
 
 **Version agent skills and shared context alongside the code they operate on.**
 
-Agent skills files, project-level conventions in `docs/agents/`, and other shared agent context are configuration — treat them like infrastructure (X113). When agent behavior needs to change because the codebase changed, the instruction update should be in the same commit. This keeps agent behavior reproducible, reviewable, and tied to the code it operates on. The `.claude/skills/` directory and `docs/agents/` conventions should be checked into version control and reviewed in PRs just like any other project configuration.
+Agent skills files, project-level conventions in `docs/agents/`, and other shared agent context are configuration — treat them like infrastructure (X114). When agent behavior needs to change because the codebase changed, the instruction update should be in the same commit. This keeps agent behavior reproducible, reviewable, and tied to the code it operates on. The `.claude/skills/` directory and `docs/agents/` conventions should be checked into version control and reviewed in PRs just like any other project configuration.
 
 # 1 - Tools & services
 
