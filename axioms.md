@@ -390,7 +390,7 @@ Some abbreviations of long words are common enough in the coding world to be eas
 
 These abbreviations are OK and preferred:
 
-`ad`, `abbr`, `ai`, `api`, `attr`, `a11y` (`l10n`, `i18n`), `bool`, `cli`, `config`, `db`, `desc`, `dict`, `enum`, `env`, `expr`, `gui`, `hex` (`oct`, etc.), `info`, `int`, `kg` (`lbs`, `ft`, `mi`, etc.), `len`, `max`, `min`, `num`, `os`, `param`, `pk`, `src`, `str`, `utils`
+`ad`, `abbr`, `ai`, `api`, `app`, `attr`, `a11y` (`l10n`, `i18n`), `bin`, `bool`, `cli`, `config`, `db`, `desc`, `dict`, `enum`, `env`, `expr`, `gui`, `hex` (`oct`, etc.), `info`, `int`, `kg` (`lbs`, `ft`, `mi`, etc.), `len`, `lib`, `max`, `min`, `num`, `os`, `param`, `pk`, `src`, `str`, `utils`
 
 So are abbreviations that are more descriptive on their own, especially for HTML attributes:
 
@@ -398,7 +398,7 @@ So are abbreviations that are more descriptive on their own, especially for HTML
 
 Abbreviations using common acronyms for formal or technical names are also OK:
 
-`amex`, `bin`, `dns`, `gpu`, `ip`, `js`, `lib`, `llm`, (`css`, `html`, `json`, `xml`, etc.), `ram`, `sql`, `src`, `url`,  `usb`, `USD` (`CAD`, etc.), `vpn`
+`amex`, `dns`, `gpu`, `ip`, `js`, `llm`, (`css`, `html`, `json`, `xml`, etc.), `ram`, `sql`, `url`,  `usb`, `USD` (`CAD`, etc.), `vpn`
 
 Avoid abbreviations that are uncommon, ambiguous, or save almost no effort over the full word:
 
