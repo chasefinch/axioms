@@ -135,7 +135,7 @@ These axioms are high-level guidelines that cannot be enforced by linters. Use t
 
 # P - Python
 
-*Ruff, UV, SH, Wemake Python Styleguide, Django, mypyc, Rust/PyO3/maturin*
+*Ruff, UV, TY, Wemake Python Styleguide, Django, mypyc, Rust/PyO3/maturin*
 
 - [**P000**](#p000) - Ask for forgiveness, not for permission.
 - [**P001**](#p001) - Let unexpected exceptions bubble to a centralized handler (for example, Sentry). Don't silently swallow them.
@@ -178,27 +178,22 @@ A harmonious stack means the tools, frameworks, and languages you choose should 
 
 ## X003
 
-**Max out formatting, linting, and static analysis tools, with opt-in-by-default for rules.**
+**Max out formatting, linting, type checking, and static analysis tools, with opt-in-by-default for rules.**
 
-For every language in your stack, adopt the strictest available formatter, linter, and static analysis tool. Automated tools catch entire categories of bugs and style drift before code review even begins, freeing reviewers to focus on design and logic.
+For every language in your stack, adopt the strictest available set of formatters, linters, type checkers, and static analysis tools. Automated tools catch entire categories of bugs and style drift before code review even begins, freeing reviewers to focus on design and logic.
 
 ✅ **A well-covered Python, Django, HTML & CSS stack:**
 
 | Tool | Role | Scope |
 | --- | --- | --- |
-| **ruff** | Linter & formatter | Python |
+| **nitpick** | Configuration requirements | Codebase |
+| **ruff** | Formatter & linter | Python |
 | **ty** | Static type checking | Python |
 | **wemake-python-styleguide** | Opinionated complexity & style linter | Python |
-| **Cutesy** | Formatter | HTML templates |
+| **Cutesy** | Formatter & linter | HTML templates |
 | **Prettier** | Formatter | CSS, JSON, Markdown |
 | **ESLint** | Linter | JavaScript |
-| **SwiftLint** | Linter & style enforcer | Swift |
-
-❌ **Gaps to avoid:**
-
-- Running ruff with rules disabled — you get formatting but miss real bugs.
-- Skipping type checking because the codebase started untyped — add `ty` and type incrementally.
-- Having no linter for templates or stylesheets — HTML and CSS errors slip through just as easily as Python ones.
+| **TypeScript** | Static type checking | Javascript |
 
 Wire every tool into a single `make lint` (see [X004](#x004)) and require it to pass in CI (see X107).
 
