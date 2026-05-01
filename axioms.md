@@ -59,16 +59,17 @@ These axioms are high-level guidelines that cannot be enforced by linters. Use t
 - [**X214**](#x214) – Prefer clear public interfaces and private implementations.
 - [**X215**](#x215) – Use fat models for structural and domain logic.
 - [**X216**](#x216) – Use adapters for integration logic.
-- [**X217**](#x217) – Prefer declarative over imperative.
-- [**X218**](#x218) – Don't repeat lookups in the same scope. An exception can be made for `self.…`, but don't build up objects on self. Build them first and then assign them.
-- **X219** – Store static values in code or configuration constants, not in the database.
-- **X220** – Use consistent techniques to reduce duplication. On the backend, prefer small, focused functions and OOP where appropriate. On the frontend, use templates with declarative interactivity and utility-class styling.
-- [**X221**](#x221) – Prefer rich data types and explicit structures to dicts or tuples with implied structure.
-- **X222** – Reference static files in a standardized way.
-- [**X223**](#x223) – Minimize intermediate state classes.
-- [**X224**](#x224) – Use highly specific type signatures.
-- [**X225**](#x225) – Phrase method names imperatively. Distinguish subject methods from object methods.
-- [**X226**](#x226) – Avoid unnecessarily defensive code.
+- [**X217**](#x217) – Organize code into hierarchical layers, grouped by concern.
+- [**X218**](#x218) – Prefer declarative over imperative.
+- [**X219**](#x219) – Don't repeat lookups in the same scope. An exception can be made for `self.…`, but don't build up objects on self. Build them first and then assign them.
+- **X220** – Store static values in code or configuration constants, not in the database.
+- **X221** – Use consistent techniques to reduce duplication. On the backend, prefer small, focused functions and OOP where appropriate. On the frontend, use templates with declarative interactivity and utility-class styling.
+- [**X222**](#x222) – Prefer rich data types and explicit structures to dicts or tuples with implied structure.
+- **X223** – Reference static files in a standardized way.
+- [**X224**](#x224) – Minimize intermediate state classes.
+- [**X225**](#x225) – Use highly specific type signatures.
+- [**X226**](#x226) – Phrase method names imperatively. Distinguish subject methods from object methods.
+- [**X227**](#x227) – Avoid unnecessarily defensive code.
 
 # 3 - Tests
 
@@ -591,7 +592,7 @@ class PriceCalculator:
 
 **Use fat models for structural and domain logic.**
 
-Business rules that relate to what an entity *is* or *can do* belong on the model, not in views or serializers. This keeps logic testable and reusable.
+Business rules that relate to what an entity *is* or *can do* belong on the model, not in views or serializers. This keeps logic testable and reusable. Models sit in the *types & models* layer of the broader architecture — see [X217](#x217).
 
 ```python
 # ❌ Logic in the view
@@ -617,7 +618,7 @@ class Order(models.Model):
 
 **Use adapters for integration logic.**
 
-Wrap third-party APIs and services in thin adapter modules. The rest of your code should avoid calling an external API directly. This isolates change, simplifies testing, and makes swapping providers straightforward.
+Wrap third-party APIs and services in thin adapter modules. The rest of your code should avoid calling an external API directly. This isolates change, simplifies testing, and makes swapping providers straightforward. Adapters are a dedicated layer in the broader architecture — see [X217](#x217).
 
 ```python
 # adapters/email.py
@@ -716,6 +717,64 @@ This keeps serialization logic out of views and models. If the API contract chan
 
 ## X217
 
+**Organize code into hierarchical layers, grouped by concern.**
+
+Most code can be factored into a small, fixed set of layers. Each layer depends only on the layers below it, giving a clean dependency graph both within and between groupings ([X208](#x208)). Within and between layers, code is organized by **concern** — domain-specific logical groupings (e.g., "orders," "users," "auth").
+
+### Layers
+
+From foundational to dependent:
+
+| Layer | Role |
+| --- | --- |
+| **Constants & helpers** | Pure values and pure-function helpers. No domain knowledge. |
+| **Adapters** | Integration glue with external services and data formats. See [X216](#x216). |
+| **Types & models** | Domain types, schemas, and persistent entities. Domain logic lives here — see [X215](#x215). |
+| **Managers & forms** | Query construction, validation, and structured input handling. |
+| **Controllers & views** | Event handling and response/render generation. |
+| **Utilities** | Top-level convenience layer that may compose anything below. |
+
+Slash-separated layers (e.g., *constants & helpers*, *controllers & views*) are the *same* layer. They are often philosophically coupled but usually simple enough to keep in separate files, with a clean import direction one way or the other between them. Everything else is a strict hierarchy.
+
+### Concerns
+
+A concern is a domain grouping. Code is organized by composing concerns and layers in either direction:
+
+- **Concern → layer:** Top-level directories per concern, with per-layer modules inside.
+- **Layer → concern:** Top-level directories per layer, with per-concern modules inside.
+- **Concern → layer → concern**, **layer → concern → layer**, etc. — nest as deep as the project's complexity warrants.
+
+**Coupling** between concerns:
+
+- *Decoupled* — one direction of dependency only.
+- *Partially coupled* — for example, controllers from each concern depend on the other's model layer, but the model layers themselves are independent.
+- *Tightly coupled with reverse relations* — convenient when the relationship is intrinsic (e.g., `User` ↔ `Profile`).
+
+All are fine when the convenience is worth the tradeoff, but most concerns shouldn't be coupled.
+
+### Mappings
+
+**Django:**
+
+- *Concerns* are apps, modules within a layer folder, or sections within a layer module.
+- *Controllers* are `views` and `signals`. Event subscriptions, page views, webhook handlers, and component renderers are all controllers — the controller/view layer is anything that produces a response.
+- *Views* (the response/render side of the controller layer) are `templates`.
+- *Utilities* are `utils`.
+- *Helpers* are `helpers` and `tagutils`.
+- *Managers* are hoisted onto the model class as class variables (`Order.objects`, `Order.published`) for convenient namespacing.
+
+**Swift:**
+
+- *Adapters* are `protocols` and protocol extensions.
+
+### Adapter style by language
+
+In Django, an adapter often declares the fields it needs and contains the logic that operates on those values inline (see [X216](#x216)). It's not strictly normalized, but it separates concerns nicely while keeping the integration logic close to the data it operates on.
+
+In Swift, you *could* do the same with protocol extensions, but it's cleaner to declare what the model will implement on the protocol and implement it directly on the model.
+
+## X218
+
 **Prefer declarative over imperative.**
 
 Declarative code describes *what* the result should be. Imperative code describes *how* to get there step by step. Declarative code is typically easier to read, less error-prone, and more composable.
@@ -742,7 +801,7 @@ active_emails = [user.email for user in users if user.is_active]
 </div>
 ```
 
-## X218
+## X219
 
 **Don't repeat lookups in the same scope.**
 
@@ -772,7 +831,7 @@ config = {"timeout": 30, "retries": 3}
 self.config = config
 ```
 
-## X221
+## X222
 
 **Prefer rich data types and explicit structures to dicts or tuples with implied structure.**
 
@@ -798,7 +857,7 @@ def get_location() -> Location:
     return Location(latitude=40.7128, longitude=-74.0060, name="New York")
 ```
 
-## X223
+## X224
 
 **Minimize intermediate state classes.**
 
@@ -859,7 +918,7 @@ class Submission(models.Model):
 
 If the class is only created to be immediately unpacked into the model that triggered the computation, skip the middleman.
 
-## X224
+## X225
 
 **Use highly specific type signatures. Don't allow `None` where a value is always expected.**
 
@@ -903,7 +962,7 @@ timeout = get_config()["timeout"]
 
 This applies beyond `None`. Prefer `str` over `str | int` if the value is always a string. Prefer a concrete dataclass over `dict` if the shape is known. Prefer an enum over `str` if the values are constrained. The narrower the type, the less defensive code you need and the more the type checker can verify for you.
 
-## X225
+## X226
 
 **Phrase method names imperatively. Distinguish subject methods from object methods.**
 
@@ -962,7 +1021,7 @@ user.deactivate()
 
 The key test: read the call site aloud. `processor.validate(order)` reads as a command — "processor, validate this order." `order.save()` reads as a command — "order, save yourself." If the method name doesn't read as a clear imperative, rephrase it.
 
-## X226
+## X227
 
 **Avoid unnecessarily defensive code.**
 
