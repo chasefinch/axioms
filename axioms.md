@@ -13,9 +13,9 @@ These axioms are high-level guidelines that cannot be enforced by linters. Use t
 - [**X004**](#x004) - Centralize automation commands, with modular entry points.
 - [**X005**](#x005) - Solve problems at the right level of abstraction (Cloudflare, database, model layer, etc.)
 - [**X006**](#x006) – Use AI in workflows where the output is fully verifiable. Give agents the loop — let them run checks, see failures, and iterate.
-- [**X007**](#x007) – Use the filesystem as the agent's memory. Prefer progressive discovery over monolithic context dumps.
+- [**X007**](#x007) – Give agents a single, dense `CLAUDE.md` under 100 lines. Link out to developer docs instead of building an agent-managed memory filesystem.
 - [**X008**](#x008) – Give agents access to a full development information set via MCPs and other discoverable interfaces.
-- [**X009**](#x009) – Version agent skills and shared context alongside the code they operate on.
+- [**X009**](#x009) – Version `CLAUDE.md` and agent configuration alongside the code they operate on.
 
 # 1 - Tools & services
 
@@ -246,27 +246,13 @@ Design your automation commands ([X004](#x004)) so agents can invoke the same `m
 
 ## X007
 
-**Use the filesystem as the agent's memory. Use progressive discovery to avoid bloating context.**
+**Give agents a single, dense `CLAUDE.md` — under 100 lines. Link out to developer docs instead of building agent-managed memory.**
 
-Structure knowledge in the filesystem so agents can find and read what's relevant as they work — the same way a new developer would navigate the project. In a short top-level agent context file like `CLAUDE.md`, instruct agents to use this system for their own benefit.
+A short, well-written `CLAUDE.md` at the project root is enough orientation: what the project is, how to run/test/build it, which conventions matter, and pointers to anything else worth reading. Keep it under 100 lines. Density matters more than completeness — every line competes with the actual code for the agent's context budget.
 
-```
-.claude/
-  settings.json        # Agent config & permissions
-  skills/              # Learned patterns, codebase-specific knowledge
-    naming.md
-    test-patterns.md
+If deeper background is useful, link out to existing developer documentation (`README.md`, `CONTRIBUTING.md`, design docs, inline docstrings) rather than duplicating it. The agent can follow the link on demand.
 
-docs/agents/
-  conventions.md       # Project-level rules agents should follow
-  examples/            # Reference outputs for common tasks
-    migration.md
-    api-endpoint.md
-```
-
-`.claude/` (or equivalent) is agent-managed working memory — skills it's learned, scratchpad notes, codebase-specific patterns it's picked up. Let agents write here so they improve over time. `docs/agents/` is human-curated guidance that agents read but don't typically modify. Standard project docs (`README.md`, `CONTRIBUTING.md`, inline docstrings) serve both audiences.
-
-Progressive discovery means the agent reads the top-level README, learns there's a `docs/` directory, reads what's relevant to the current task, and drills deeper only as needed. This mirrors how context-limited agents actually work best — small, relevant context windows rather than an entire codebase in the system prompt.
+Avoid building an agent-managed memory filesystem. Sprawling scratchpads, "learned skills" directories, and parallel agent-only documentation hierarchies drift from the code, get out of sync, and add noise. The codebase, its tests, and standard developer docs already are the project's memory — let the agent read those directly.
 
 ## X008
 
@@ -282,9 +268,9 @@ Well-designed MCP integrations make the agent's environment self-documenting —
 
 ## X009
 
-**Version agent skills and shared context alongside the code they operate on.**
+**Version `CLAUDE.md` and agent configuration alongside the code they operate on.**
 
-Agent skills files, project-level conventions in `docs/agents/`, and other shared agent context are configuration — treat them like infrastructure (X114). When agent behavior needs to change because the codebase changed, the instruction update should be in the same commit. This keeps agent behavior reproducible, reviewable, and tied to the code it operates on. The `.claude/skills/` directory and `docs/agents/` conventions should be checked into version control and reviewed in PRs just like any other project configuration.
+`CLAUDE.md`, agent settings (`.claude/settings.json`, hooks), and any other shared agent context are configuration — treat them like infrastructure (X114). When agent behavior needs to change because the codebase changed, the instruction update should be in the same commit. This keeps agent behavior reproducible, reviewable, and tied to the code it operates on. Check these files into version control and review them in PRs like any other project configuration.
 
 # 1 - Tools & services
 
