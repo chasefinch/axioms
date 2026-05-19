@@ -578,7 +578,7 @@ class PriceCalculator:
 
 **Use fat models for structural and domain logic.**
 
-Business rules that relate to what an entity *is* or *can do* belong on the model, not in views or serializers. This keeps logic testable and reusable. Models sit in the *types & models* layer of the broader architecture — see [X217](#x217).
+Business rules that relate to what an entity *is* or *can do* belong on the model, not in views or serializers. This keeps logic testable and reusable. Models sit in the *model* layer of the broader architecture — see [X217](#x217).
 
 ```python
 # ❌ Logic in the view
@@ -713,14 +713,13 @@ From foundational to dependent:
 
 | Layer | Role |
 | --- | --- |
-| **Constants & helpers** | Pure values and pure-function helpers. No domain knowledge. |
+| **Views** | Templates built from primitive placeholders |
+| **Constants** | Pure values. No domain knowledge. |
 | **Adapters** | Integration glue with external services and data formats. See [X216](#x216). |
-| **Types & models** | Domain types, schemas, and persistent entities. Domain logic lives here — see [X215](#x215). |
-| **Managers & forms** | Query construction, validation, and structured input handling. |
-| **Controllers & views** | Event handling and response/render generation. |
+| **Models** | Domain types, schemas, and persistent entities. Domain logic lives here — see [X215](#x215). |
+| **Forms** | Query construction, validation, and structured input handling. |
+| **Controllers** | Event handling and response/render generation. |
 | **Utilities** | Top-level convenience layer that may compose anything below. |
-
-Slash-separated layers (e.g., *constants & helpers*, *controllers & views*) are the *same* layer. They are often philosophically coupled but usually simple enough to keep in separate files, with a clean import direction one way or the other between them. Everything else is a strict hierarchy.
 
 ### Concerns
 
@@ -728,7 +727,6 @@ A concern is a domain grouping. Code is organized by composing concerns and laye
 
 - **Concern → layer:** Top-level directories per concern, with per-layer modules inside.
 - **Layer → concern:** Top-level directories per layer, with per-concern modules inside.
-- **Concern → layer → concern**, **layer → concern → layer**, etc. — nest as deep as the project's complexity warrants.
 
 **Coupling** between concerns:
 
@@ -742,11 +740,11 @@ All are fine when the convenience is worth the tradeoff, but most concerns shoul
 
 **Django:**
 
-- *Concerns* are apps, modules within a layer folder, or sections within a layer module.
-- *Controllers* are `views` and `signals`. Event subscriptions, page views, webhook handlers, and component renderers are all controllers — the controller/view layer is anything that produces a response.
-- *Views* (the response/render side of the controller layer) are `templates`.
+- *Concerns* are apps or sections within a layer module.
+- *Views* are `templates` and `tagutils`.
+- *Controllers* are `views` and `signals`. Event subscriptions, page views, webhook handlers, and component renderers are all controllers, e.g. anything that produces a response.
+- *Forms* are `forms`, but also managers coupled tightly to `model` classes.
 - *Utilities* are `utils`.
-- *Helpers* are `helpers` and `tagutils`.
 - *Managers* are hoisted onto the model class as class variables (`Order.objects`, `Order.published`) for convenient namespacing.
 
 **Swift:**
