@@ -13,7 +13,7 @@ These axioms are high-level guidelines that cannot be enforced by linters. Use t
 - [**X004**](#x004) - Centralize automation commands, with modular entry points.
 - [**X005**](#x005) - Solve problems at the right level of abstraction (Cloudflare, database, model layer, etc.)
 - [**X006**](#x006) – Use AI in workflows where the output is fully verifiable. Give agents the loop — let them run checks, see failures, and iterate.
-- [**X007**](#x007) – Give agents a single, dense `CLAUDE.md` under 100 lines. Link out to developer docs instead of building an agent-managed memory filesystem.
+- [**X007**](#x007) – Give agents a single, dense `CLAUDE.md` under 100 lines.
 - [**X008**](#x008) – Give agents access to a full development information set via MCPs and other discoverable interfaces.
 - [**X009**](#x009) – Version `CLAUDE.md` and agent configuration alongside the code they operate on.
 
@@ -176,6 +176,8 @@ A harmonious stack means the tools, frameworks, and languages you choose should 
 ✅ **Good:** Django + Postgres + Redis + Celery — Django has first-class support for Postgres features, and Celery is the de facto async task runner for Django apps.
 
 ❌ **Bad:** Django + MongoDB + Sidekiq — MongoDB fights Django's ORM, and Sidekiq is a Ruby tool with no natural bridge to Python.
+
+See [stack.md](stack.md) for the languages, tiers, and front-end choices that compose into harmonious stacks.
 
 ## X003
 
