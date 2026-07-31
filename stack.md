@@ -1,3 +1,7 @@
+<!--
+Copyright (C) 2025 Chase Finch
+SPDX-License-Identifier: MIT
+-->
 # Software Stack
 
 These are the languages, tiers, and front-end choices that compose into harmonious stacks, along with the trade-offs that motivate each.

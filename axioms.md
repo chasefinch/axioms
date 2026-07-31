@@ -1,3 +1,7 @@
+<!--
+Copyright (C) 2025 Chase Finch
+SPDX-License-Identifier: MIT
+-->
 # Software Development Axioms
 
 These axioms are high-level guidelines that cannot be enforced by linters. Use them during design, development, and code review as a shared mental model for how to build software.
