@@ -4,7 +4,7 @@ SPDX-License-Identifier: MIT
 -->
 # Software Development Axioms
 
-These axioms are high-level guidelines that cannot be enforced by linters. Use them during design, development, and code review as a shared mental model for how to build software.
+These axioms are high-level guidelines that cannot be enforced by linters. Use them during design, development, and code review as a shared mental model for how to build software. Apply them in proportion to the project: a small codebase needs only the few that fit it.
 
 # 0 - Meta & orchestration
 
